@@ -1,8 +1,12 @@
-# FreePBX LDAP Directory
-A simple LDAP server to serve a searchable address book of internal extensions from the FreePBX DB
+# This is a 
+A simple LDAP server to serve a searchable address book of internal extensions from the FreePBX DB to Gigaset DECT devices such as the current IP670 Pro.
+
+## Thanks!
+This work is based on a1commss freepbx-ldap, vjeantet's goldap as well as vjeantet's ldapserver. Many THANKS for sharing your work.
+
 
 ## How it works
-It starts the LDAP service on port 10389 and responds to directory search requests by translating them into a SQL query against the "asterisk.users" table in MySQL.
+It starts the LDAP service on port 10389 and responds to directory search requests by translating them into a SQL query against the "asterisk.users" table in MySQL/MariaDB.
 
 Since we aren't working with sensitive information or trying to implement authentication, but most phones require a bind request with a username & password before they'll search, it'll respond as success to any bind request without checking credentials.
 
@@ -15,13 +19,44 @@ MySQL to LDAP mapping is:
 * "extension" in MySQL maps to "telephoneNumber" in LDAP
 
 ## Build & Usage
-To build, you will need the Go runtime and to build you just need to run:
+To build, you will need to install the Go runtime
 
+```
+yum update
+wget https://dl.google.com/go/go1.14.1.linux-amd64.tar.gz
+tar -xzf go1.14.1.linux-amd64.tar.gz
+mv go /usr/local
+```
+
+Setup the environment
+```
+export GOROOT=/usr/local/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+```
+
+Clone the repo
+```
+git clone https://github.com/kaeferfreund/freepbx-ldap.git
+```
+
+Clone dependencies
+```
+go get github.com/vjeantet/ldapserver
+go get github.com/vjeantet/goldap
+```
+
+build
 ```
 go build
 ```
 
-## Recommended Install Procedure
+start with debug console output
+```
+.\freepbx-ldap
+```
+
+
+## Recommended Install Procedure for production use
 ```
 # mkdir -p /opt/freepbx-ldap
 # cp <freepbx-ldap binary location> /opt/freepbx-ldap/freepbx-ldap
