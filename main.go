@@ -150,6 +150,11 @@ func handleSearchDSE(w ldap.ResponseWriter, m *ldap.Message) {
 				}
 			}
 		default:
+			if(r.FilterString() == "(objectClass=*)"){
+				sqlVals = append(sqlVals, r.BaseObject())
+				where += swapField("displayName") + " = ?"
+				log.Printf("Looking up contact detail!")
+			}
 			log.Printf("Searching without filter...")
 		}
 
@@ -167,7 +172,7 @@ func handleSearchDSE(w ldap.ResponseWriter, m *ldap.Message) {
 	sql += " " + recursiveFilter(r.Filter(), true) + " "
 
 	sql += " ORDER BY name ASC LIMIT 0, ?"
-	sqlVals = append(sqlVals, r.SizeLimit().Int())
+	sqlVals = append(sqlVals, 99)
 
 	log.Printf("Query SQL: %s %#v", sql, sqlVals)
 	result, err := SQLSearch(sql, sqlVals)
@@ -176,7 +181,7 @@ func handleSearchDSE(w ldap.ResponseWriter, m *ldap.Message) {
 	}
 
 	for _, entry := range result {
-		e := ldap.NewSearchResultEntry("")
+		e := ldap.NewSearchResultEntry(entry.Name)
 		e.AddAttribute("displayName", message.AttributeValue(entry.Name))
 		e.AddAttribute("telephoneNumber", message.AttributeValue(entry.Extension))
 		w.Write(e)
