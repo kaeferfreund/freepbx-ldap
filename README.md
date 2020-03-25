@@ -79,6 +79,7 @@ You'll need to configure your IP phones to look up against the LDAP server.
 Server port: 10389
 Name filter: (&(telephoneNumber=*)(displayName=%))
 Number filter: (&(telephoneNumber=%)(displayName=*))
+Display format: %displayName
 Surname: displayName
 Phone (office): telephoneNumber
 ```
