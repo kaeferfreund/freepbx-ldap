@@ -83,3 +83,6 @@ Display format: %displayName
 Surname: displayName
 Phone (office): telephoneNumber
 ```
+
+# Licensing
+Please contact me before using my work in a commercial application
