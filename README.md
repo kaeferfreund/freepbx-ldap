@@ -1,5 +1,5 @@
 # FreePBX LDAP for Gigaset
-A simple LDAP server to serve a searchable address book of internal extensions from the FreePBX DB to Gigaset DECT devices such as the current IP670 Pro.
+A simple LDAP server to serve a searchable address book of internal extensions from the FreePBX DB to Gigaset DECT devices such as the current N670IP Pro.
 
 ## Thanks!
 This work is based on a1commss freepbx-ldap, vjeantet's goldap as well as vjeantet's ldapserver. Many THANKS for sharing your work.
