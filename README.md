@@ -1,4 +1,4 @@
-# This is a 
+# FreePBX LDAP for Gigaset
 A simple LDAP server to serve a searchable address book of internal extensions from the FreePBX DB to Gigaset DECT devices such as the current IP670 Pro.
 
 ## Thanks!
