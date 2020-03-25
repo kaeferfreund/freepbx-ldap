@@ -19,6 +19,8 @@ MySQL to LDAP mapping is:
 * "extension" in MySQL maps to "telephoneNumber" in LDAP
 
 ## Build & Usage
+You can build the binary on your linux dev machine (as long as its the same processor architecture) or directly on your freepbx server (recommended). To build everything on the freepbx server you need to login via ssh an follow the instructions below:
+
 To build, you will need to install the Go runtime
 
 ```
