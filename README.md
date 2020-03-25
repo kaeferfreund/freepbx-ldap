@@ -73,7 +73,6 @@ start with debug console output
 ## Phone Configuration
 You'll need to configure your IP phones to look up against the LDAP server.
 
-See examples below:
 
 ### Gigaset N670IP
 ```
