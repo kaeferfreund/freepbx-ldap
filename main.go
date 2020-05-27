@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/vjeantet/goldap/message"
+	"github.com/lor00x/goldap/message"
 	ldap "github.com/vjeantet/ldapserver"
 )
 
