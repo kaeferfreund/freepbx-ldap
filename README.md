@@ -54,7 +54,7 @@ go build
 
 start with debug console output
 ```
-.\freepbx-ldap
+./freepbx-ldap
 ```
 
 
