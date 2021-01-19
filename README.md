@@ -6,7 +6,7 @@ This work is based on a1commss freepbx-ldap, vjeantet's goldap as well as vjeant
 
 
 ## How it works
-It starts the LDAP service on port 10389 and responds to directory search requests by translating them into a SQL query against the "asterisk.users" table in MySQL/MariaDB.
+It starts the LDAP service on port 10389 and on port 11389 and responds to directory search requests by translating them into a SQL query against the "asterisk.users" table in MySQL/MariaDB.
 
 Since we aren't working with sensitive information or trying to implement authentication, but most phones require a bind request with a username & password before they'll search, it'll respond as success to any bind request without checking credentials.
 
@@ -21,19 +21,19 @@ MySQL to LDAP mapping is:
 ## Build & Usage
 You can build the binary on your linux dev machine (as long as its the same processor architecture) or directly on your freepbx server (recommended). To build everything on the freepbx server you need to login via ssh an follow the instructions below:
 
-To build, you will need to install the Go runtime
+To build, you will need to install the Go runtime (you might need to change the version number if there is a newer Go version)
 
 ```
 yum update
-wget https://dl.google.com/go/go1.14.1.linux-amd64.tar.gz
-tar -xzf go1.14.1.linux-amd64.tar.gz
+wget https://dl.google.com/go/go1.15.6.linux-amd64.tar.gz
+tar -xzf go1.15.6.linux-amd64.tar.gz
 mv go /usr/local
 ```
 
 Setup the environment
 ```
 export GOROOT=/usr/local/go
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+export GOPATH=/usr/local/go/bin
 ```
 
 Clone the repo
@@ -44,15 +44,16 @@ git clone https://github.com/kaeferfreund/freepbx-ldap.git
 Clone dependencies
 ```
 go get github.com/vjeantet/ldapserver
-go get github.com/vjeantet/goldap
+go get github.com/lor00x/goldap/message
+go get github.com/go-sql-driver/mysql
 ```
 
-build
+Execute build in the directory of main.go from the cloned freepbx-ldap repo
 ```
 go build
 ```
 
-start with debug console output
+Start with debug console output
 ```
 ./freepbx-ldap
 ```
@@ -76,7 +77,7 @@ You'll need to configure your IP phones to look up against the LDAP server.
 
 ### Gigaset N670IP
 ```
-Server port: 10389
+Server port: 10389 <for internal phonebook> and 11389 <for external phonebook>
 Name filter: (&(telephoneNumber=*)(displayName=%))
 Number filter: (&(telephoneNumber=%)(displayName=*))
 Display format: %displayName
