@@ -20,41 +20,41 @@ func main() {
 		log.Printf("DB ERROR: %s", err.Error())
 		return
 	}
- 
+
 	//Create LDAP Server
 	intServer := ldap.NewServer()
-	extServer := ldap.NewServer()
+	// extServer := ldap.NewServer()
 
 	//Create routes bindings
 	intRoutes := ldap.NewRouteMux()
-	extRoutes := ldap.NewRouteMux()
+	// extRoutes := ldap.NewRouteMux()
 
 	intRoutes.Bind(handleBindInt)
 	intRoutes.Search(handleSearchDSEint).Label("Search - Generic internal extentions")
 
-	extRoutes.Bind(handleBindExt)
-	extRoutes.Search(handleSearchDSEext).Label("Search - Generic external contacts")
+	// extRoutes.Bind(handleBindExt)
+	// extRoutes.Search(handleSearchDSEext).Label("Search - Generic external contacts")
 
 	//Attach routes
 	intServer.Handle(intRoutes)
-	extServer.Handle(extRoutes)
+	// extServer.Handle(extRoutes)
 
 	// listen and serve
 	go intServer.ListenAndServe(intPort)
-	go extServer.ListenAndServe(extPort)
+	// go extServer.ListenAndServe(extPort)
 
 	// When CTRL+C, SIGINT and SIGTERM signal occurs
 	// Then stop internalintServer gracefully
 	ch := make(chan os.Signal)
-	extCh := make(chan os.Signal)
+	// extCh := make(chan os.Signal)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
-	signal.Notify(extCh, syscall.SIGINT, syscall.SIGTERM)
+	// signal.Notify(extCh, syscall.SIGINT, syscall.SIGTERM)
 	<-ch
-	<-extCh
+	// <-extCh
 	close(ch)
-	close(extCh)
+	// close(extCh)
 	intServer.Stop()
-	extServer.Stop()	
+	// extServer.Stop()
 }
 
 func handleBindInt(w ldap.ResponseWriter, m *ldap.Message) {
@@ -170,7 +170,7 @@ func handleSearchDSEint(w ldap.ResponseWriter, m *ldap.Message) {
 				}
 			}
 		default:
-			if(r.FilterString() == "(objectClass=*)"){
+			if r.FilterString() == "(objectClass=*)" {
 				sqlVals = append(sqlVals, r.BaseObject())
 				where += swapField("displayName") + " = ?"
 			}
@@ -221,7 +221,7 @@ func handleSearchDSEext(w ldap.ResponseWriter, m *ldap.Message) {
 	log.Printf("Request TimeLimit=%d", r.TimeLimit().Int())
 	log.Printf("Request SizeLimit=%d", r.SizeLimit().Int())
 
-	sql := "SELECT cge.displayname, cen.number AS 'sortorder' FROM contactmanager_group_entries AS cge LEFT JOIN contactmanager_entry_numbers AS cen ON cen.entryid = cge.id WHERE cge.groupid = (SELECT cg.id FROM contactmanager_groups AS cg WHERE cg.name = '"+groupName+"')"
+	sql := "SELECT cge.displayname, cen.number AS 'sortorder' FROM contactmanager_group_entries AS cge LEFT JOIN contactmanager_entry_numbers AS cen ON cen.entryid = cge.id WHERE cge.groupid = (SELECT cg.id FROM contactmanager_groups AS cg WHERE cg.name = '" + groupName + "')"
 	sqlVals := []interface{}{}
 
 	swapField := func(v string) string {
@@ -311,7 +311,7 @@ func handleSearchDSEext(w ldap.ResponseWriter, m *ldap.Message) {
 				}
 			}
 		default:
-			if(r.FilterString() == "(objectClass=*)"){
+			if r.FilterString() == "(objectClass=*)" {
 				sqlVals = append(sqlVals, r.BaseObject())
 				where += swapField("displayName") + " = ?"
 			}
